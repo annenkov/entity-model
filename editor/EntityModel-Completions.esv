@@ -1,0 +1,31 @@
+module EntityModel-Completions
+
+imports EntityModel-Completions.generated
+
+completions
+                                                                   
+  // This file is used to define content completion.               
+  //                                                               
+  // See the imported file for a brief introduction and examples.  
+                                                                   
+
+completions
+                                             
+  // Syntax completion:                      
+                                             
+  completion template Start :
+    "module " <m> (blank)  
+                                             
+  completion template Definition :
+    "entity " <e> "\n" (cursor) "\n" "end" (blank)  
+                                             
+  completion template Property : "property : Type" =
+    <x> " : " <T> (blank)  
+                                             
+
+completions
+  // Semantic (identifier) completion:   
+                                         
+  completion proposer                  : editor-complete
+                                         
+  completion trigger                   : ":"

@@ -1,0 +1,103 @@
+module generate
+
+imports
+  libstratego-lib
+  libstratego-gpp
+  libstratego-aterm
+  include/EntityModel
+  lib/editor-common.generated
+  utils
+
+rules
+  project-name: _ -> "sample"
+
+  to-python:
+      Module(x, d*) ->
+      $[ # -*- coding: utf-8 -*-
+
+         from django.db import models
+
+         [d'*]
+       ]
+      with
+         d'* := <to-python> d*
+
+  to-python:
+	Entity(x, p*) ->
+    $[ class [x](models.Model):
+           [p'*]       
+     ]
+	with
+	      p'* := <to-python> p*
+
+  to-python:
+    Property(x, t) ->
+	$[    [x] = [field_type]         
+     ]
+     with 
+         field_type := <to-python> t 
+
+  to-python:
+    Type("String") -> $[models.CharField(max_length=256)]
+
+  to-python:
+    Type("String", len) -> $[models.CharField(max_length=[len])]
+  
+  to-python:
+    Type("URL")    -> $[models.UrlField()]
+
+  to-python:
+    Type("Int")    -> $[models.IntegerField()]
+
+  to-python:
+    EntityAssoc(e)    -> $[models.ForeignKey([e])]
+
+  to-django-admin:
+      Module(x, d*) ->
+      $[ # -*- coding: utf-8 -*-
+
+         from django.contrib import admin
+         from [p-name].[x] import models
+
+         [d'*]
+
+         [r'*]
+       ]
+      with
+         d'* := <to-django-admin> d*;
+         r'* := <to-django-admin-register> d*;
+         p-name := <project-name>
+
+  to-django-admin:
+	Entity(x, p) ->
+    $[ class [x]Admin(admin.ModelAdmin):
+           [<to-list-display> p]
+
+       
+     ]
+
+  to-django-admin-register:
+	Entity(x, p*) ->
+    $[ admin.site.register(models.[x], [x]Admin)
+     ]
+
+  get-module-name:
+      Module(x, d*) -> $[[x]]
+
+  to-list-display:
+      p ->
+      $[ list_display = ([fields-list])]
+      with
+          fields-list := <string-join(|" ")> <map(get-property-name)> p
+  
+  get-property-name:
+    Property(x, _) -> $['[x]',]
+
+  to-python:
+    t* -> <map(to-python)> t* 
+
+  to-django-admin:
+    t* -> <map(to-django-admin)> t*
+
+  to-django-admin-register:
+    t* -> <map(to-django-admin-register)> t*

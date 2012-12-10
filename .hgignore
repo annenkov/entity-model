@@ -1,0 +1,9 @@
+syntax: glob
+
+*.generated.*
+generated
+include
+bin
+working
+java
+.cache

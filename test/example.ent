@@ -1,0 +1,16 @@
+/**
+* Example EntityModel program.
+*/  
+module crm
+
+entity Customer
+  name     : String
+  description: String
+end
+
+entity Contact
+  customer : Customer
+  name     : String
+  phone    : String
+  email    : String
+end

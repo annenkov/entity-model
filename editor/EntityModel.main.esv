@@ -1,0 +1,16 @@
+module EntityModel.main
+
+imports EntityModel-Builders EntityModel-Colorer EntityModel-Completions EntityModel-Folding EntityModel-Outliner EntityModel-References EntityModel-Syntax
+
+language General properties
+                  
+  name          : EntityModel
+  id            : EntityModel
+  extends       : Root
+                  
+  description   : "Spoofax/IMP-generated editor for the EntityModel language"
+  url           : http://strategoxt.org
+                  
+  extensions    : ent
+  table         : include/EntityModel.tbl
+  start symbols : Start

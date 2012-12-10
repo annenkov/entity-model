@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?eclipse version="3.0"?>
+
+<plugin>
+       <extension point="org.eclipse.imp.runtime.languageDescription">
+          <language extensions="ent" description="EntityModel" language="EntityModel" derivedFrom="DynamicRoot" validator="EntityModel.EntityModelValidator" validatorClass="EntityModel.EntityModelValidator"></language>
+       </extension>
+       <extension id="EntityModel.parser" name="EntityModel Parser" point="org.eclipse.imp.runtime.parser">
+          <parser class="EntityModel.EntityModelParseController" language="EntityModel">
+          </parser>
+       </extension>    
+    </plugin>

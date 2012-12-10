@@ -1,0 +1,10 @@
+module utils
+
+imports
+ libstratego-lib
+
+strategies
+  // from https://bitbucket.org/karltk/new-stratego-lib
+  /** @type list(string) * string (joinstring) -> string */
+  string-join(|c) = <foldl(\(x,y) -> <concat-strings> [y, c, x]\)> (<Tl>, <Hd>)
+  string-join(|c) : [] -> ""
