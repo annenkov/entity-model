@@ -6,6 +6,7 @@ module crm
 entity Customer
   name     : String
   description: String
+  repr name
 end
 
 entity Contact

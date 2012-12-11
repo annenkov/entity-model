@@ -23,19 +23,32 @@ rules
          d'* := <to-python> d*
 
   to-python:
-	Entity(x, p*) ->
+	Entity(x, p*, r) ->
     $[ class [x](models.Model):
-           [p'*]       
+           [p'*]          
+           def __unicode__(self):
+               return "[x]: {0}".format([to-string])
+
+
      ]
 	with
-	      p'* := <to-python> p*
-
+	      p'* := <to-python> p*;
+          to-string := <to-string-repr> r
+  
   to-python:
     Property(x, t) ->
 	$[    [x] = [field_type]         
      ]
      with 
          field_type := <to-python> t 
+  
+  to-string-repr:
+    None() -> 
+    $[self.pk]
+   
+  to-string-repr:
+    Some(Repr(name)) -> 
+    $[self.[name]]
 
   to-python:
     Type("String") -> $[models.CharField(max_length=256)]
@@ -69,7 +82,7 @@ rules
          p-name := <project-name>
 
   to-django-admin:
-	Entity(x, p) ->
+	Entity(x, p, _) ->
     $[ class [x]Admin(admin.ModelAdmin):
            [<to-list-display> p]
 
@@ -77,7 +90,7 @@ rules
      ]
 
   to-django-admin-register:
-	Entity(x, p*) ->
+	Entity(x, p*, _) ->
     $[ admin.site.register(models.[x], [x]Admin)
      ]
 

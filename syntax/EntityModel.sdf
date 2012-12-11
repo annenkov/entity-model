@@ -11,11 +11,12 @@ exports
 
   context-free syntax
   
-    "module" ID Definition*       -> Start {cons("Module")}
-    "entity" ID Property* "end"   -> Definition {cons("Entity")}
-	ID ":" Type                   -> Property {cons("Property")}
-    ID ":" EntityAssoc            -> Property {cons("Property")}
-    TypeLiteral                   -> Type {cons("Type")}
-    TypeLiteral "(" INT ")"       -> Type {cons("Type")}
-    Type                          -> EntityAssoc {reject}    
-    ID                            -> EntityAssoc {cons("EntityAssoc")} 
+    "module" ID Definition*                 -> Start {cons("Module")}
+    "entity" ID Property* Repr? "end"       -> Definition {cons("Entity")}
+    "repr" ID                               -> Repr {cons("Repr")}
+	ID ":" Type                             -> Property {cons("Property")}
+    ID ":" EntityAssoc                      -> Property {cons("Property")}
+    TypeLiteral                             -> Type {cons("Type")}
+    TypeLiteral "(" INT ")"                 -> Type {cons("Type")}
+    Type                                    -> EntityAssoc {reject}    
+    ID                                      -> EntityAssoc {cons("EntityAssoc")} 

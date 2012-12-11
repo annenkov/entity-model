@@ -16,7 +16,7 @@ rules
 
   // Records the definition of an entity in a dynamic rule GetEntity.
   record-entity:
-    Entity(x, body) -> Entity(x, body)
+    Entity(x, properties, repr) -> Entity(x, properties, repr)
     with
       // For a name 'x', GetEntity will return the original 'x' tree node
       rules(
