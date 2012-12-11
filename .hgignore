@@ -5,5 +5,4 @@ generated
 include
 bin
 working
-java
 .cache

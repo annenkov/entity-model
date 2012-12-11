@@ -4,11 +4,11 @@ from django.contrib import admin
 from sample.crm import models
 
 class CustomerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'description',)
 
 
 class ContactAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('customer', 'name', 'phone', 'email',)
 
 
 
