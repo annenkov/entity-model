@@ -29,9 +29,12 @@ rules
   constraint-error:
     Property(x, Type(type)) -> (type, $[Type [type] is not defined])
     where
-      not(!type => "String"); // String and Int are built-in types
+      // built-in types
+      not(!type => "String");
       not(!type => "Int");
       not(!type => "URL");
+      not(!type => "Date");
+      not(!type => "Email");
       not(<GetEntity> type) // no entity for this type
   
   constraint-error:

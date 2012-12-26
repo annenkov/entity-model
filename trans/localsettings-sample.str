@@ -1,0 +1,7 @@
+/* 
+   To get it work copy this file to localsettings.str 
+*/
+module localsettings 
+
+rules
+	project-path: _ -> "/tmp/sample-project/"

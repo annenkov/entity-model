@@ -28,7 +28,7 @@ rules // Main editor interface (defined by editor/EntityModel-Builders and -Refe
     (selected, position, ast, path, project-path) -> (models_file, result)
     with
       models_file := <concat-strings> [<dirname> path, "/models.py"];
-      result   := <to-python> selected
+      result   := <to-django-model> selected
 
   // Transforms a selection to django model amdin
   generate-django-admin:
@@ -41,12 +41,12 @@ rules // Main editor interface (defined by editor/EntityModel-Builders and -Refe
     (selected, position, ast, path, project-path) -> None()
    with      
       module_name := <get-module-name> selected;
-      models := <to-python> selected;
-      models_file := $[E:/Global_project/python/test_generated/sample/[module_name]/models.py];
+      models := <to-django-model> selected;
+      models_file := $[[<project-path>][module_name]/models_generated.py];
       <debug> $[Writing [models_file]];
       mf_handle := <fopen> (models_file, "w");
       <fclose> <fputs> (models, mf_handle);
-      amdin_file := $[E:/Global_project/python/test_generated/sample/[module_name]/admin.py];
+      amdin_file := $[[<project-path>][module_name]/admin_generated.py];
       <debug> $[Writing [amdin_file]];
       af_handle := <fopen> (amdin_file, "w");
       <fclose> <fputs> (<to-django-admin> selected, af_handle)
@@ -76,9 +76,11 @@ rules // Main editor interface (defined by editor/EntityModel-Builders and -Refe
   // Completes an identifier when the user presses control-space
   // (the completion identifier in the AST provides additional context information)
   editor-complete:
-    (node, position, ast, path, project-path) ->
-    ["String", "Int" | proposals]
+    (EntityAssoc(COMPLETION(prefix)), position, ast, path, project-path) ->
+    [|proposals]
     where
-      if !node => EntityAssoc(COMPLETION(prefix)) then
         proposals := <all-keys-GetEntity>
-      end
+
+  editor-complete:
+    (Type(COMPLETION(prefix)), position, ast, path, project-path) -> ["String", "Int", "Email", "URL", "Date"]
+ 

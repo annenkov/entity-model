@@ -1,0 +1,7 @@
+module settings
+
+imports
+	localsettings // dont' forget to copy localsettings-sample.str to localsettings.str!
+
+rules
+	/*Some global settings*/

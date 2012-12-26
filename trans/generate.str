@@ -1,6 +1,7 @@
 module generate
 
 imports
+  settings
   libstratego-lib
   libstratego-gpp
   libstratego-aterm
@@ -9,20 +10,22 @@ imports
   utils
 
 rules
-  project-name: _ -> "sample"
+  project-name: _ -> "crm_generated"
 
-  to-python:
+  to-django-model:
       Module(x, d*) ->
       $[ # -*- coding: utf-8 -*-
-
+         __all__ = ([all*],)
+         
          from django.db import models
 
          [d'*]
        ]
       with
-         d'* := <to-python> d*
+         d'* := <to-django-model> d*;
+         all* :=  <string-join(|", ")> <map(\Entity(x, _, _) -> $['[x]'] \)> d*
 
-  to-python:
+  to-django-model:
 	Entity(x, p*, r) ->
     $[ class [x](models.Model):
            [p'*]          
@@ -32,15 +35,15 @@ rules
 
      ]
 	with
-	      p'* := <to-python> p*;
+	      p'* := <to-django-model> p*;
           to-string := <to-string-repr> r
   
-  to-python:
+  to-django-model:
     Property(x, t) ->
 	$[    [x] = [field_type]         
      ]
      with 
-         field_type := <to-python> t 
+         field_type := <to-django-model> t 
   
   to-string-repr:
     None() -> 
@@ -50,27 +53,34 @@ rules
     Some(Repr(name)) -> 
     $[self.[name]]
 
-  to-python:
+  to-django-model:
     Type("String") -> $[models.CharField(max_length=256)]
 
-  to-python:
+  to-django-model:
     Type("String", len) -> $[models.CharField(max_length=[len])]
   
-  to-python:
-    Type("URL")    -> $[models.UrlField()]
-
-  to-python:
+  to-django-model:
     Type("Int")    -> $[models.IntegerField()]
+   
+  to-django-model:
+    Type("Date")    -> $[models.DateField()]
+    
+  to-django-model:
+    Type("URL")    -> $[models.URLField()]
+    
+  to-django-model:
+    Type("Email")    -> $[models.EmailField()]
 
-  to-python:
+  to-django-model:
     EntityAssoc(e)    -> $[models.ForeignKey([e])]
 
   to-django-admin:
       Module(x, d*) ->
       $[ # -*- coding: utf-8 -*-
+         __all__ = ([all*],)
 
          from django.contrib import admin
-         from [p-name].[x] import models
+         from [<project-name>].[x] import models
 
          [d'*]
 
@@ -79,7 +89,7 @@ rules
       with
          d'* := <to-django-admin> d*;
          r'* := <to-django-admin-register> d*;
-         p-name := <project-name>
+         all* :=  <string-join(|", ")> <map(\Entity(x, _, _) -> $['[x]Admin'] \)> d*
 
   to-django-admin:
 	Entity(x, p, _) ->
@@ -99,15 +109,15 @@ rules
 
   to-list-display:
       p ->
-      $[ list_display = ([fields-list])]
+      $[ list_display = ([fields-list],)]
       with
-          fields-list := <string-join(|" ")> <map(get-property-name)> p
+          fields-list := <string-join(|", ")> <map(get-property-name)> p
   
   get-property-name:
-    Property(x, _) -> $['[x]',]
+    Property(x, _) -> $['[x]']
 
-  to-python:
-    t* -> <map(to-python)> t* 
+  to-django-model:
+    t* -> <map(to-django-model)> t* 
 
   to-django-admin:
     t* -> <map(to-django-admin)> t*

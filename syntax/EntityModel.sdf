@@ -15,8 +15,7 @@ exports
     "entity" ID Property* Repr? "end"       -> Definition {cons("Entity")}
     "repr" ID                               -> Repr {cons("Repr")}
 	ID ":" Type                             -> Property {cons("Property")}
-    ID ":" EntityAssoc                      -> Property {cons("Property")}
-    TypeLiteral                             -> Type {cons("Type")}
-    TypeLiteral "(" INT ")"                 -> Type {cons("Type")}
-    Type                                    -> EntityAssoc {reject}    
+    ID "->" EntityAssoc                     -> Property {cons("Property")}
+    ID                                      -> Type {cons("Type")}
+    ID "(" INT ")"                          -> Type {cons("Type")}
     ID                                      -> EntityAssoc {cons("EntityAssoc")} 

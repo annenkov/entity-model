@@ -4,7 +4,7 @@ exports
 
   lexical syntax
   
-    [a-zA-Z][a-zA-Z0-9]* -> ID
+    [a-zA-Z][a-zA-Z0-9\_]* -> ID
     "-"? [0-9]+          -> INT
     
     "\"" StringChar* "\"" -> STRING
@@ -17,10 +17,7 @@ exports
     
     [\*]                             -> CommentChar
     "/*" (~[\*] | CommentChar)* "*/" -> LAYOUT
-    "//" ~[\n\r]* ([\n\r] | EOF)     -> LAYOUT
-    "String"                      -> TypeLiteral
-    "URL"                         -> TypeLiteral
-    "Int"                         -> TypeLiteral
+    "//" ~[\n\r]* ([\n\r] | EOF)     -> LAYOUT   
     -> EOF
   
   lexical restrictions
