@@ -6,4 +6,7 @@ colorer
                                                                       
   // This file can be used for custom colorer rules.                  
   //                                                                  
-  // See the imported file for a brief introduction and examples.     
+  // See the imported file for a brief introduction and examples.
+  
+_.Type : 139 69 19 italic
+_.EntityAssoc : 0 0 128 bold
