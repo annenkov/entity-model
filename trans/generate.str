@@ -8,6 +8,7 @@ imports
   include/EntityModel
   lib/editor-common.generated
   utils
+  queries
 
 rules
   project-name: _ -> "crm_generated"
