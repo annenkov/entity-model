@@ -16,3 +16,8 @@ entity Contact
   email     : Email
   customer -> Customer
 end
+
+entity Task
+  title    : String
+  customer -> Customer
+end
