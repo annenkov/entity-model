@@ -1,0 +1,11 @@
+module queries
+
+imports
+  libstratego-lib
+  include/EntityModel
+
+rules
+  get-all-props = collect-all(?Property(_,Type(_)), conc)
+  get-all-string-props = collect-all(?Property(_,Type("String")), conc)
+  get-all-entities-with-2-props = collect-all(where(?Entity(_,<length => 2>,_)), conc)
+  get-all-entities-with-assocs = collect-all(where(?Entity(_,<fetch(?Property(_, EntityAssoc("Customer")))>,_)), conc)
